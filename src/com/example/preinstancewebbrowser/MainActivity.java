@@ -2,12 +2,16 @@ package com.example.preinstancewebbrowser;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
+	static final String TAG = "MainActivity : ";
+	
 	/**
 	 * ViewGroup
 	 */
@@ -19,7 +23,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		assignViewField();
-		final Activity activity = this;
+		
 		content.setWebChromeClient(new WebChromeClient(){});
 		content.setWebViewClient(new WebViewClient(){});	// 현재 webview 에서 보여지도록 함
 		content.loadUrl("http://www.naver.com");
@@ -28,6 +32,21 @@ public class MainActivity extends Activity {
 //		content.loadData(summary, "text/html", null);
 		 
 		unassignViewField();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		assignViewField();
+		// 뒤로 버튼 눌렀을시 뒤로가기
+		if (content != null && keyCode == KeyEvent.KEYCODE_BACK){
+			if (content.canGoBack())
+				content.goBack();
+			else
+				this.finish();
+		}
+		unassignViewField();
+		//return super.onKeyDown(keyCode, event);	// Activity가 꺼지므로, 이벤트 막
+		return true;
 	}
 
 	/**
