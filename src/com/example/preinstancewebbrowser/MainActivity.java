@@ -2,6 +2,9 @@ package com.example.preinstancewebbrowser;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.webkit.WebChromeClient;
@@ -36,17 +39,33 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		assignViewField();
 		// 뒤로 버튼 눌렀을시 뒤로가기
-		if (content != null && keyCode == KeyEvent.KEYCODE_BACK){
+		if (keyCode == KeyEvent.KEYCODE_BACK){
+			assignViewField();
 			if (content.canGoBack())
 				content.goBack();
-			else
-				this.finish();
+			else{
+				// confirm finish
+				new AlertDialog.Builder(this)
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.setTitle(android.R.string.ok)
+					.setMessage("종료하시겠습니까?")
+					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//Stop the activity
+							MainActivity.this.finish();    
+						}
+					})
+					.setNegativeButton(android.R.string.no, null)
+					.show();
+			}
+			
+			unassignViewField();
+			return true;
+		} else {
+			return super.onKeyDown(keyCode, event);
 		}
-		unassignViewField();
-		//return super.onKeyDown(keyCode, event);	// Activity가 꺼지므로, 이벤트 막
-		return true;
 	}
 
 	/**
