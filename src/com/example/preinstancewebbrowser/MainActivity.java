@@ -3,6 +3,7 @@ package com.example.preinstancewebbrowser;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -18,8 +19,9 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		assignViewField();
-		
-		content.setWebViewClient(new WebViewClient());
+		final Activity activity = this;
+		content.setWebChromeClient(new WebChromeClient(){});
+		content.setWebViewClient(new WebViewClient(){});	// 현재 webview 에서 보여지도록 함
 		content.loadUrl("http://www.naver.com");
 		
 //		String summary = "<html><body>You scored <b>192</b> points.</body></html>";
